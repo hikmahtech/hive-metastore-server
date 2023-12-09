@@ -1,8 +1,4 @@
-version: '3'
-
-networks:
-  datalake-nw:
-    external: true
+version: "3"
 
 services:
   hive:
@@ -24,13 +20,6 @@ services:
       - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
       - HADOOP_HOME=/usr/local/hadoop
       - HIVE_HOME=/usr/local/hive
-    # healthcheck:
-    #   test: [ "CMD", "sh", "-c", "nc -z hive 10001" ]
-    #   interval: 20s
-    #   timeout: 10s
-    #   retries: 10
-    networks:
-      - datalake-nw
 
   mysql:
     container_name: mysql
@@ -41,15 +30,8 @@ services:
       MYSQL_DATABASE: metastore
       MYSQL_USER: hive
       MYSQL_PASSWORD: hive
-    volumes:
-      - ./data/mysql:/var/lib/mysql
-      - ./data/mysql-init:/docker-entrypoint-initdb.d
-    ports:
-      - "3306:3306"
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "mysql" ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
       interval: 20s
       timeout: 10s
       retries: 10
-    networks:
-      - datalake-nw
